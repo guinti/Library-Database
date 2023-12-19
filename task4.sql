@@ -1,3 +1,7 @@
+CREATE SCHEMA Library;
+
+SET SEARCH_PATH = Library;
+
 CREATE TABLE Clients (
     ClientEmail VARCHAR(320) PRIMARY KEY CHECK (ClientEmail LIKE '%@%'),
     FirstName VARCHAR(100),

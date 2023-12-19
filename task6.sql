@@ -1,3 +1,5 @@
+SET SEARCH_PATH = Library;
+
 -- Клиенты, которые написали не менее 2 отзывов (возможно на одну книгу) --
 SELECT Clients.ClientEmail, Clients.FirstName, Clients.LastName, COUNT(ReviewsHistory.ClientEmail) AS NumberOfReviews
 FROM Clients
@@ -41,3 +43,4 @@ SELECT
     COUNT(*) OVER (PARTITION BY ClientEmail, TO_CHAR(ReviewTime, 'Month YYYY')) AS ReviewCount
 FROM ReviewsHistory
 ORDER BY ClientEmail, MonthYear;
+
