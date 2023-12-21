@@ -42,8 +42,8 @@ CREATE TABLE Books_X_Genres (
 );
 
 CREATE TABLE Transactions (
-    BookID INT REFERENCES Books(BookID),
-    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail) on delete cascade on update cascade,
     TransactionTime DATE,
     Type VARCHAR(100) NOT NULL,
     PRIMARY KEY (BookID, ClientEmail, TransactionTime)
