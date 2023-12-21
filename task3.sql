@@ -29,15 +29,15 @@ CREATE TABLE Genres (
 );
 
 CREATE TABLE Books_X_Authors (
-    BookID INT REFERENCES Books(BookID),
-    AuthorID INT REFERENCES Authors(AuthorID),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    AuthorID INT REFERENCES Authors(AuthorID) on delete cascade on update cascade,
     PRIMARY KEY (BookID, AuthorID)
 );
 
 
 CREATE TABLE Books_X_Genres (
-    BookID INT REFERENCES Books(BookID),
-    GenreID INT REFERENCES Genres(GenreID),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    GenreID INT REFERENCES Genres(GenreID) on delete cascade on update cascade,
     PRIMARY KEY (BookID, GenreID)
 );
 
@@ -65,4 +65,3 @@ CREATE TABLE ReviewsHistory (
     Comment TEXT,
     PRIMARY KEY (BookID, ClientEmail, ReviewTime)
 );
-
