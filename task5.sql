@@ -1,11 +1,12 @@
 -- CRUD = Create, Read, Update, Delete
 
+
 -- CREATE
 
 -- 1
 -- Let's insert new book with its author and genre
 WITH new_book AS (
-  INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('A Room of One's Own', '1929-09-09', 10) RETURNING BookID
+  INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('A Room of One`s Own', '1929-09-09', 10) RETURNING BookID
 ), new_author AS (
   INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('Virginia', 'Woolf', '1882-01-25') RETURNING AuthorID
 )
@@ -14,7 +15,7 @@ SELECT new_book.BookID, new_author.AuthorID FROM new_book, new_author;
 
 
 -- 2
--- Let's insert a new genre and assign it too certain book 
+-- Let's insert a new genre and assign it too certain book
 WITH new_genre AS (
   INSERT INTO Genres (GenreName) VALUES ('Historical Fiction') RETURNING GenreID
 )
@@ -74,11 +75,11 @@ WHERE (BookID, ClientEmail) IN (
 
 -- 7
 -- Let's delete clients who have not made any transactions in the past year (old clients):
---DELETE FROM Clients
---WHERE ClientEmail NOT IN (
---  SELECT ClientEmail FROM Transactions
---  WHERE TransactionTime > CURRENT_DATE - INTERVAL '1 year'
---);
+DELETE FROM Clients
+WHERE ClientEmail NOT IN (
+  SELECT ClientEmail FROM Transactions
+  WHERE TransactionTime > CURRENT_DATE - INTERVAL '1 year'
+);
 
 -- 8
 -- Let's delete all transactions for books that are no longer available:
@@ -87,5 +88,4 @@ WHERE BookID IN (
   SELECT BookID FROM Books
   WHERE CopiesAvailable = 0
 );
-
 
