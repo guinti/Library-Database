@@ -56,7 +56,7 @@ ORDER BY AverageRating DESC;
 
 --  Представление дает статистику аренд на каждый месяц:
 --      1) Самая популярная книга (наибольшее число аренд): название книги и ее автора
---      2) Самый активный клиент (наибольшее число аренд): если есть, то имя и замаскированная фамилия, иначе замаскированная почта 
+--      2) Самый активный клиент (наибольшее число аренд): если есть, то имя и замаскированная фамилия, иначе замаскированная почта
 --      3) Количество книг, арендованных в этом месяце
 --      4) Количество людей, делавших аренду в этом месяце
 
@@ -140,10 +140,10 @@ SELECT
     MAX(P.SummaryPopularity) AS BookCount,
     MAX(A.SummaryActivity) AS ClientCount
 FROM BorrowedTransactions T
-    JOIN PopularBooks B ON T.BookID = B.BookID AND B.MonthYear = T.MonthYear AND B.PopularityRank = 1
-    JOIN ActiveClients C ON T.ClientEmail = C.ClientEmail AND C.MonthYear = T.MonthYear  AND C.ActivityRank = 1
-    JOIN SummaryActivity A ON T.MonthYear = A.MonthYear
-    JOIN SummaryPopularity P ON T.MonthYear = P.MonthYear
+    LEFT JOIN PopularBooks B ON T.BookID = B.BookID AND B.MonthYear = T.MonthYear AND B.PopularityRank = 1
+    LEFT JOIN ActiveClients C ON T.ClientEmail = C.ClientEmail AND C.MonthYear = T.MonthYear  AND C.ActivityRank = 1
+    LEFT JOIN SummaryActivity A ON T.MonthYear = A.MonthYear
+    LEFT JOIN SummaryPopularity P ON T.MonthYear = P.MonthYear
 GROUP BY T.MonthYear
 ORDER BY MAX(T.TransactionTime);
 
@@ -161,23 +161,25 @@ WITH
             BookID,
             ClientEmail,
             TransactionTime,
-            ROW_NUMBER() OVER (PARTITION BY BookID, ClientEmail ORDER BY TransactionTime DESC) AS RowNumber
+            Type,
+            ROW_NUMBER() OVER (PARTITION BY BookID, ClientEmail ORDER BY TransactionTime DESC) AS Rank
         FROM Transactions
+    ),
+    BorrowedBooks AS (
+        SELECT
+            BookID,
+            COUNT(ClientEmail) as CopiesTaken
+        FROM RankedTransactions T
+        WHERE T.Rank = 1 AND (Type = 'Borrow' OR Type = 'Reserve' OR Type = 'Expansion')
+        GROUP BY BookID
     ),
     AvailableBooks as (
         SELECT
-            B.CopiesAvailable -
-            COUNT(CASE WHEN T.Type = 'Borrow' THEN 1 END) +
-            COUNT(CASE WHEN T.Type = 'Return' THEN 1 END) -
-            COUNT(CASE WHEN T.Type = 'Reserve' AND T.TransactionTime > NOW() -
-            INTERVAL '7 days' AND RT.RowNumber = 1 THEN 1 END) AS AvailableCount,
+            B.CopiesAvailable - COALESCE(BB.CopiesTaken, 0) as AvailableCount,
             B.BookID,
             B.Title
-        FROM Transactions T
-            JOIN RankedTransactions RT
-                ON T.BookID = RT.BookID AND T.ClientEmail = RT.ClientEmail AND T.TransactionTime = RT.TransactionTime
-            JOIN Books B ON T.BookID = B.BookID
-        GROUP BY B.BookID
+        FROM Books B
+            LEFT JOIN BorrowedBooks BB ON B.BookID = BB.BookID
     ),
     AuthorNames AS (
         SELECT AuthorID,
@@ -202,10 +204,10 @@ SELECT
     END AS Author,
     MAX(B.AvailableCount) as CurrentBookNumber
 FROM AvailableBooks B
-    JOIN Books_X_Genres BG ON B.BookID = BG.BookID
-    JOIN Genres G ON BG.GenreID = G.GenreID
-    JOIN Books_X_Authors BA ON B.BookID = BA.BookID
-    JOIN AuthorNames A ON BA.AuthorID = A.AuthorID
+    LEFT JOIN Books_X_Genres BG ON B.BookID = BG.BookID
+    LEFT JOIN Genres G ON BG.GenreID = G.GenreID
+    LEFT JOIN Books_X_Authors BA ON B.BookID = BA.BookID
+    LEFT JOIN AuthorNames A ON BA.AuthorID = A.AuthorID
 WHERE B.AvailableCount > 0
 GROUP BY B.BookID
 ORDER BY MAX(B.Title);

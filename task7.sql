@@ -4,12 +4,13 @@ SET SEARCH_PATH = Library;
 CREATE OR REPLACE VIEW BooksView AS
 SELECT
     Title,
-    FirstName || LastName AS Author,
+    COALESCE(COALESCE(FirstName || ' ' || LastName, FirstName), LastName) AS Author,
     PublishedDate,
     CopiesAvailable
 FROM Books
 LEFT JOIN Books_X_Authors ON Books.BookID = Books_X_Authors.BookID
-LEFT JOIN Authors ON Books_X_Authors.AuthorID = Authors.AuthorID;
+LEFT JOIN Authors ON Books_X_Authors.AuthorID = Authors.AuthorID
+ORDER BY Title;
 
 
 CREATE OR REPLACE VIEW AuthorsView AS
@@ -17,13 +18,15 @@ SELECT
     FirstName,
     LastName,
     BirthDate
-FROM Authors;
+FROM Authors
+ORDER BY Birthdate;
 
 
 CREATE OR REPLACE VIEW GenresView AS
 SELECT
     GenreName
-FROM Genres;
+FROM Genres
+ORDER BY GenreName;
 
 
 CREATE OR REPLACE VIEW ClientsView AS
@@ -56,7 +59,8 @@ SELECT
     Rating,
     Comment
 FROM ReviewsHistory
-LEFT JOIN Books ON ReviewsHistory.BookID = Books.BookID;
+LEFT JOIN Books ON ReviewsHistory.BookID = Books.BookID
+ORDER BY ReviewTime;
 
 
 CREATE OR REPLACE VIEW TransactionsView AS
@@ -67,5 +71,6 @@ SELECT
     DATE(TransactionTime) AS TransationDate,
     Type
 FROM Transactions
-LEFT JOIN Books ON Books.BookID = Transactions.BookID;
+LEFT JOIN Books ON Books.BookID = Transactions.BookID
+ORDER BY TransactionTime;
 
