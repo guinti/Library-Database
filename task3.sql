@@ -29,40 +29,39 @@ CREATE TABLE Genres (
 );
 
 CREATE TABLE Books_X_Authors (
-    BookID INT REFERENCES Books(BookID),
-    AuthorID INT REFERENCES Authors(AuthorID),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    AuthorID INT REFERENCES Authors(AuthorID) on delete cascade on update cascade,
     PRIMARY KEY (BookID, AuthorID)
 );
 
 
 CREATE TABLE Books_X_Genres (
-    BookID INT REFERENCES Books(BookID),
-    GenreID INT REFERENCES Genres(GenreID),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    GenreID INT REFERENCES Genres(GenreID) on delete cascade on update cascade,
     PRIMARY KEY (BookID, GenreID)
 );
 
 CREATE TABLE Transactions (
-    BookID INT REFERENCES Books(BookID),
-    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail) on delete cascade on update cascade,
     TransactionTime DATE,
     Type VARCHAR(100) NOT NULL,
     PRIMARY KEY (BookID, ClientEmail, TransactionTime)
 );
 
 CREATE TABLE Reviews (
-    BookID INT REFERENCES Books(BookID),
-    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail) on delete cascade on update cascade,
     Rating INT NOT NULL CHECK (Rating >= 0 AND Rating <= 10),
     Comment TEXT,
     PRIMARY KEY (BookID, ClientEmail)
 );
 
 CREATE TABLE ReviewsHistory (
-    BookID INT REFERENCES Books(BookID),
-    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail) on delete cascade on update cascade,
     ReviewTime TIMESTAMP,
     Rating INT NOT NULL CHECK (Rating >= 0 AND Rating <= 10),
     Comment TEXT,
     PRIMARY KEY (BookID, ClientEmail, ReviewTime)
 );
-
