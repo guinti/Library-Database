@@ -1,5 +1,3 @@
-SET SEARCH_PATH = Library;
-
 --Clients Table
 INSERT INTO Clients (ClientEmail, FirstName, LastName, Password) VALUES ('john.doe@email.com', 'John', 'Doe', 'password123');
 INSERT INTO Clients (ClientEmail, FirstName, LastName, Password) VALUES ('jane.smith@email.com', 'Jane', 'Smith', 'password456');
@@ -14,6 +12,11 @@ INSERT INTO Books (Title, CopiesAvailable) VALUES ('To Kill a Mockingbird', 5);
 INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('War and Peace', '1867-01-09', 12);
 INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('Pride and Prejudice', '1813-01-28', 7);
 INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('The Da Vinci Code', '2003-03-18', 30);
+INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('Animal Farm', '1945-08-17', 2);
+INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('Anna Karenina', '1877-06-25', 11);
+INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('Sevastopol Sketches', 8);
+INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('The Hitchhikers Guide to the Galaxy', '1979-10-12', 3);
+INSERT INTO Books (Title, PublishedDate, CopiesAvailable) VALUES ('The Lord of the Rings', '1954-07-29', 22);
 
 
 --Authors Table
@@ -22,6 +25,8 @@ INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('Harper', 'Lee', '1
 INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('Leo', 'Tolstoy', '1828-09-09');
 INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('Jane', 'Austen', '1775-12-16');
 INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('Dan', 'Brown', '1964-06-22');
+INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('Adams', 'Douglas', '1952-03-11');
+INSERT INTO Authors (FirstName, LastName, BirthDate) VALUES ('John', 'Tolkin', '1952-03-11');
 
 
 --Genres Table
@@ -38,7 +43,11 @@ INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (2, 2);
 INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (3, 3);
 INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (4, 4);
 INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (5, 5);
-
+INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (6, 1);
+INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (7, 3);
+INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (8, 3);
+INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (9, 6);
+INSERT INTO Books_X_Authors (BookID, AuthorID) VALUES (10, 7);
 
 --Books_X_Genres Table
 --Linking books to genres:
@@ -47,6 +56,11 @@ INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (2, 2);
 INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (3, 3);
 INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (4, 4);
 INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (5, 5);
+INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (6, 1);
+INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (7, 3);
+INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (8, 3);
+INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (9, 2);
+INSERT INTO Books_X_Genres (BookID, GenreID) VALUES (10, 4);
 
 --Transactions Table
 --Sample transactions:
