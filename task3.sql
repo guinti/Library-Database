@@ -50,16 +50,16 @@ CREATE TABLE Transactions (
 );
 
 CREATE TABLE Reviews (
-    BookID INT REFERENCES Books(BookID),
-    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail) on delete cascade on update cascade,
     Rating INT NOT NULL CHECK (Rating >= 0 AND Rating <= 10),
     Comment TEXT,
     PRIMARY KEY (BookID, ClientEmail)
 );
 
 CREATE TABLE ReviewsHistory (
-    BookID INT REFERENCES Books(BookID),
-    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail),
+    BookID INT REFERENCES Books(BookID) on delete cascade on update cascade,
+    ClientEmail VARCHAR(320) REFERENCES Clients(ClientEmail) on delete cascade on update cascade,
     ReviewTime TIMESTAMP,
     Rating INT NOT NULL CHECK (Rating >= 0 AND Rating <= 10),
     Comment TEXT,
